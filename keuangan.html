@@ -2035,6 +2035,79 @@
         box-shadow: 0 28px 70px rgba(0,0,0,.62) !important;
       }
     }
+
+
+    /* =====================================================
+       FINAL FIX DEVICE HP: menu samping mode gelap bisa dipilih & discroll
+       - overlay dimatikan saat menu terbuka agar tidak menutup klik
+       - bottom nav disembunyikan total saat menu dibuka
+       - sidebar dibuat full panel dan scroll sendiri
+       ===================================================== */
+    @media (max-width: 860px) {
+      body.menu-open {
+        overflow: hidden !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+      }
+
+      body.menu-open .overlay {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      body.menu-open .mobile-bottom-nav {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      body.menu-open .sidebar {
+        position: fixed !important;
+        z-index: 99999 !important;
+        top: max(12px, env(safe-area-inset-top, 0px)) !important;
+        right: 12px !important;
+        bottom: max(12px, env(safe-area-inset-bottom, 0px)) !important;
+        left: 12px !important;
+        width: auto !important;
+        height: auto !important;
+        max-height: none !important;
+        transform: none !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        touch-action: pan-y !important;
+        padding-bottom: max(34px, env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      body.menu-open .sidebar .nav,
+      body.menu-open .sidebar .nav button,
+      body.menu-open .sidebar .premium-card,
+      body.menu-open .sidebar .btn {
+        pointer-events: auto !important;
+        position: relative !important;
+        z-index: 100000 !important;
+      }
+
+      body.menu-open .sidebar .nav button {
+        min-height: 54px !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+      }
+
+      :root[data-theme="dark"] body.menu-open .sidebar {
+        background: #0b1220 !important;
+        border-color: rgba(246, 213, 141, .24) !important;
+        box-shadow: 0 30px 80px rgba(0,0,0,.72) !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -4269,6 +4342,86 @@
     window.addEventListener("pageshow", function() {
       closeMenu();
     });
+
+  
+
+    // FINAL FIX HP: saat menu dibuka, bottom nav benar-benar disembunyikan
+    // dan sidebar dipaksa bisa menerima scroll/click di iPhone/Android.
+    (function finalMobileMenuFix(){
+      const sidebar = document.getElementById('sidebar');
+      const bottomNav = document.querySelector('.mobile-bottom-nav');
+      const overlay = document.querySelector('.overlay');
+      const menuButton = document.querySelector('.mobile-menu');
+
+      function syncMobileMenuState() {
+        const open = document.body.classList.contains('menu-open');
+        if (bottomNav) bottomNav.style.display = open ? 'none' : '';
+        if (overlay) {
+          overlay.style.display = 'none';
+          overlay.style.pointerEvents = 'none';
+        }
+        if (sidebar) {
+          sidebar.style.pointerEvents = open ? 'auto' : '';
+          if (open) sidebar.style.webkitOverflowScrolling = 'touch';
+        }
+      }
+
+      window.openZakiyMenu = function() {
+        document.body.classList.add('menu-open');
+        if (sidebar) sidebar.scrollTop = 0;
+        syncMobileMenuState();
+      };
+
+      window.closeZakiyMenu = function() {
+        document.body.classList.remove('menu-open');
+        if (bottomNav) bottomNav.style.display = '';
+        if (overlay) {
+          overlay.style.display = '';
+          overlay.style.pointerEvents = '';
+        }
+        if (sidebar) sidebar.style.pointerEvents = '';
+      };
+
+      const oldToggleMenu = window.toggleMenu;
+      window.toggleMenu = function() {
+        if (document.body.classList.contains('menu-open')) window.closeZakiyMenu();
+        else window.openZakiyMenu();
+      };
+
+      const oldCloseMenu = window.closeMenu;
+      window.closeMenu = function() {
+        window.closeZakiyMenu();
+      };
+
+      if (menuButton) {
+        menuButton.onclick = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          window.toggleMenu();
+        };
+      }
+
+      if (sidebar) {
+        sidebar.addEventListener('touchmove', function(event) {
+          event.stopPropagation();
+        }, { passive: true });
+
+        sidebar.addEventListener('click', function(event) {
+          const btn = event.target.closest('.nav button[data-page]');
+          if (!btn) return;
+          event.preventDefault();
+          event.stopPropagation();
+          showPage(btn.dataset.page);
+        }, true);
+      }
+
+      document.addEventListener('click', function() {
+        setTimeout(syncMobileMenuState, 0);
+      }, true);
+
+      window.addEventListener('resize', syncMobileMenuState);
+      window.addEventListener('pageshow', syncMobileMenuState);
+    })();
 
   </script>
 </body>
