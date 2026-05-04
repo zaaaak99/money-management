@@ -1983,7 +1983,59 @@
       }
     }
 
-  </style>
+  
+
+    /* === FIX FINAL HP: sidebar/menu mode gelap bisa discroll & tidak ketutup bottom nav === */
+    @media (max-width: 860px) {
+      body.menu-open {
+        overflow: hidden !important;
+        position: fixed;
+        width: 100%;
+      }
+
+      body.menu-open .sidebar {
+        z-index: 120 !important;
+        top: max(10px, env(safe-area-inset-top, 0px)) !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: max(10px, env(safe-area-inset-bottom, 0px)) !important;
+        width: auto !important;
+        max-height: calc(100dvh - 20px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        overscroll-behavior: contain !important;
+        padding-bottom: 28px !important;
+      }
+
+      body.menu-open .overlay {
+        z-index: 100 !important;
+        background: rgba(2, 6, 23, .62) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      body.menu-open .mobile-bottom-nav {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(18px) !important;
+      }
+
+      .sidebar .nav,
+      .sidebar .premium-card {
+        position: relative;
+        z-index: 1;
+      }
+
+      :root[data-theme="dark"] body.menu-open .sidebar {
+        background: linear-gradient(180deg, #101827 0%, #08111f 100%) !important;
+        border-color: rgba(251, 210, 106, .20) !important;
+        box-shadow: 0 28px 70px rgba(0,0,0,.62) !important;
+      }
+    }
+</style>
 </head>
 <body>
   <div id="authScreen" class="pin-screen show">
