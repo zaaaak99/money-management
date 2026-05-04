@@ -1015,10 +1015,24 @@
       flex: 0 0 auto;
     }
 
+    .logo-image.real-logo {
+      background: #fff;
+      padding: 7px;
+      object-fit: contain;
+      border: 1px solid rgba(15, 23, 42, .08);
+    }
+
     .logo-image.large {
       width: 50px;
       height: 50px;
       border-radius: 14px;
+    }
+
+    .logo-image.large.real-logo {
+      width: 58px;
+      height: 58px;
+      padding: 9px;
+      border-radius: 18px;
     }
 
     @media (max-width: 1180px) {
@@ -2409,7 +2423,8 @@
               </div>
 
               <div id="providerGrid" class="provider-grid"></div>
-              <div class="small" style="margin-top:-2px;">Nama akun bisa diisi bebas sesuai keinginan user, tidak harus sama dengan nama bank/e-wallet.</div>
+              <div class="small" style="margin-top:-2px;">Logo memakai gambar asli dari internet. Jika koneksi/logo gagal dimuat, otomatis kembali ke logo cadangan.</div>
+              <div class="small" style="margin-top:-7px;">Nama akun bisa diisi bebas sesuai keinginan user, tidak harus sama dengan nama bank/e-wallet.</div>
 
               <div class="form-row">
                 <label>Nama Akun (bebas)
@@ -2945,6 +2960,40 @@
       "Lainnya": { abbr: "USER", c1: "#64748b", c2: "#94a3b8", text: "#ffffff" }
     };
 
+    const providerLogoUrls = {
+      "DANA": "https://logo.clearbit.com/dana.id",
+      "GoPay": "https://logo.clearbit.com/gopay.co.id",
+      "OVO": "https://logo.clearbit.com/ovo.id",
+      "ShopeePay": "https://logo.clearbit.com/shopeepay.co.id",
+      "LinkAja": "https://logo.clearbit.com/linkaja.id",
+      "SeaBankPay": "https://logo.clearbit.com/seabank.co.id",
+      "BCA": "https://logo.clearbit.com/bca.co.id",
+      "Mandiri": "https://logo.clearbit.com/bankmandiri.co.id",
+      "BNI": "https://logo.clearbit.com/bni.co.id",
+      "BRI": "https://logo.clearbit.com/bri.co.id",
+      "CIMB Niaga": "https://logo.clearbit.com/cimbniaga.co.id",
+      "Permata": "https://logo.clearbit.com/permatabank.com",
+      "Jenius": "https://logo.clearbit.com/jenius.com",
+      "SeaBank": "https://logo.clearbit.com/seabank.co.id",
+      "Bank Jago": "https://logo.clearbit.com/jago.com",
+      "Bibit": "https://logo.clearbit.com/bibit.id",
+      "Ajaib": "https://logo.clearbit.com/ajaib.co.id",
+      "Stockbit": "https://logo.clearbit.com/stockbit.com",
+      "Bareksa": "https://logo.clearbit.com/bareksa.com",
+      "IPOT": "https://logo.clearbit.com/indopremier.com",
+      "Emas": "https://logo.clearbit.com/pegadaian.co.id",
+      "Crypto": "https://logo.clearbit.com/indodax.com",
+      "Reksa Dana": "https://logo.clearbit.com/bibit.id"
+    };
+
+    function getLogoUrl(name) {
+      return providerLogoUrls[name] || "";
+    }
+
+    function functionAttr(value) {
+      return String(value || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+
     function getProviderName(accountOrName, type = "Lainnya") {
       if (typeof accountOrName === "string") {
         return accountOrName;
@@ -2976,7 +3025,12 @@
 
     function logoImg(name, type = "Lainnya", sizeClass = "") {
       const title = escapeHTML(name || type || "Akun");
-      return `<img class="logo-image ${sizeClass}" src="${makeLogoDataURI(name, type)}" alt="Logo ${title}" />`;
+      const fallback = makeLogoDataURI(name, type);
+      const realLogo = getLogoUrl(name);
+      if (realLogo) {
+        return `<img class="logo-image real-logo ${sizeClass}" src="${functionAttr(realLogo)}" alt="Logo ${title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.remove('real-logo');this.src='${functionAttr(fallback)}';" />`;
+      }
+      return `<img class="logo-image ${sizeClass}" src="${functionAttr(fallback)}" alt="Logo ${title}" loading="lazy" />`;
     }
 
     function applySelectedProvider(autofill = false) {
