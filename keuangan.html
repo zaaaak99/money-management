@@ -1105,6 +1105,7 @@
       padding: 7px;
       object-fit: contain;
       border: 1px solid rgba(15, 23, 42, .08);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, .10);
     }
 
     .logo-image.large {
@@ -1114,10 +1115,10 @@
     }
 
     .logo-image.large.real-logo {
-      width: 58px;
-      height: 58px;
-      padding: 9px;
-      border-radius: 18px;
+      width: 64px;
+      height: 64px;
+      padding: 10px;
+      border-radius: 20px;
     }
 
     @media (max-width: 1180px) {
@@ -3212,7 +3213,7 @@
     };
 
     const presets = {
-      "E-Wallet": ["DANA", "GoPay", "OVO", "ShopeePay", "LinkAja", "SeaBankPay", "Custom E-Wallet"],
+      "E-Wallet": ["DANA", "GoPay", "OVO", "ShopeePay", "SeaBankPay", "Custom E-Wallet"],
       "Bank": ["BCA", "Mandiri", "BNI", "BRI", "CIMB Niaga", "Permata", "Jenius", "SeaBank", "Bank Jago", "Custom Bank"],
       "Investasi": ["Bibit", "Ajaib", "Stockbit", "Bareksa", "IPOT", "Emas", "Crypto", "Reksa Dana", "Custom Investasi"],
       "Cash": ["Dompet Cash", "Uang Tunai", "Celengan"],
@@ -3232,7 +3233,6 @@
       "GoPay": { abbr: "GoPay", c1: "#00a6f4", c2: "#0f766e", text: "#ffffff" },
       "OVO": { abbr: "OVO", c1: "#5b21b6", c2: "#8b5cf6", text: "#ffffff" },
       "ShopeePay": { abbr: "SPay", c1: "#f97316", c2: "#ef4444", text: "#ffffff" },
-      "LinkAja": { abbr: "Link", c1: "#dc2626", c2: "#fb7185", text: "#ffffff" },
       "SeaBankPay": { abbr: "SEA", c1: "#fb923c", c2: "#fde047", text: "#111827" },
       "BCA": { abbr: "BCA", c1: "#2563eb", c2: "#60a5fa", text: "#ffffff" },
       "Mandiri": { abbr: "MDRI", c1: "#1d4ed8", c2: "#f59e0b", text: "#ffffff" },
@@ -3266,34 +3266,35 @@
       "Lainnya": { abbr: "USER", c1: "#64748b", c2: "#94a3b8", text: "#ffffff" }
     };
 
-    const providerLogoUrls = {
-      "DANA": "https://logo.clearbit.com/dana.id",
-      "GoPay": "https://logo.clearbit.com/gopay.co.id",
-      "OVO": "https://logo.clearbit.com/ovo.id",
-      "ShopeePay": "https://logo.clearbit.com/shopeepay.co.id",
-      "LinkAja": "https://logo.clearbit.com/linkaja.id",
-      "SeaBankPay": "https://logo.clearbit.com/seabank.co.id",
-      "BCA": "https://logo.clearbit.com/bca.co.id",
-      "Mandiri": "https://logo.clearbit.com/bankmandiri.co.id",
-      "BNI": "https://logo.clearbit.com/bni.co.id",
-      "BRI": "https://logo.clearbit.com/bri.co.id",
-      "CIMB Niaga": "https://logo.clearbit.com/cimbniaga.co.id",
-      "Permata": "https://logo.clearbit.com/permatabank.com",
-      "Jenius": "https://logo.clearbit.com/jenius.com",
-      "SeaBank": "https://logo.clearbit.com/seabank.co.id",
-      "Bank Jago": "https://logo.clearbit.com/jago.com",
-      "Bibit": "https://logo.clearbit.com/bibit.id",
-      "Ajaib": "https://logo.clearbit.com/ajaib.co.id",
-      "Stockbit": "https://logo.clearbit.com/stockbit.com",
-      "Bareksa": "https://logo.clearbit.com/bareksa.com",
-      "IPOT": "https://logo.clearbit.com/indopremier.com",
-      "Emas": "https://logo.clearbit.com/pegadaian.co.id",
-      "Crypto": "https://logo.clearbit.com/indodax.com",
-      "Reksa Dana": "https://logo.clearbit.com/bibit.id"
+    const providerLogoDomains = {
+      "DANA": "dana.id",
+      "GoPay": "gopay.co.id",
+      "OVO": "ovo.id",
+      "ShopeePay": "shopeepay.co.id",
+      "SeaBankPay": "seabank.co.id",
+      "BCA": "bca.co.id",
+      "Mandiri": "bankmandiri.co.id",
+      "BNI": "bni.co.id",
+      "BRI": "bri.co.id",
+      "CIMB Niaga": "cimbniaga.co.id",
+      "Permata": "permatabank.com",
+      "Jenius": "jenius.com",
+      "SeaBank": "seabank.co.id",
+      "Bank Jago": "jago.com",
+      "Bibit": "bibit.id",
+      "Ajaib": "ajaib.co.id",
+      "Stockbit": "stockbit.com",
+      "Bareksa": "bareksa.com",
+      "IPOT": "indopremier.com",
+      "Emas": "pegadaian.co.id",
+      "Crypto": "indodax.com",
+      "Reksa Dana": "bibit.id"
     };
 
     function getLogoUrl(name) {
-      return providerLogoUrls[name] || "";
+      const domain = providerLogoDomains[name];
+      if (!domain) return "";
+      return `https://www.google.com/s2/favicons?sz=128&domain_url=https://${domain}`;
     }
 
     function functionAttr(value) {
