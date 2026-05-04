@@ -1619,6 +1619,109 @@
       .theme-options { grid-template-columns: 1fr; }
     }
 
+
+
+    /* === FIX HP MODE GELAP: login bisa discroll & menu tidak blur === */
+    .pin-screen.show {
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      align-items: flex-start;
+      justify-items: center;
+    }
+
+    .pin-screen {
+      min-height: 100dvh;
+      height: 100dvh;
+      padding-bottom: max(120px, calc(120px + var(--safe-bottom)));
+    }
+
+    .auth-shell,
+    .pin-box {
+      max-height: none;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    body.menu-open .overlay {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    @media (max-width: 860px) {
+      :root[data-theme="dark"] .topbar,
+      :root[data-theme="dark"] .sidebar,
+      :root[data-theme="dark"] .card,
+      :root[data-theme="dark"] .pin-box,
+      :root[data-theme="dark"] .auth-shell,
+      :root[data-theme="dark"] .mobile-bottom-nav,
+      :root[data-theme="dark"] .modal-card,
+      :root[data-theme="dark"] .statement-paper {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      :root[data-theme="dark"] .sidebar {
+        background: #0b1220 !important;
+        color: #f8fafc;
+      }
+
+      :root[data-theme="dark"] .card,
+      :root[data-theme="dark"] .statement-paper {
+        background: #111827 !important;
+      }
+
+      :root[data-theme="dark"] .mobile-bottom-nav {
+        background: #0b1220 !important;
+      }
+
+      .pin-screen.show {
+        display: flex !important;
+        justify-content: center;
+      }
+
+      .auth-shell {
+        width: min(440px, calc(100vw - 28px)) !important;
+        margin: 0 auto;
+      }
+
+      .pin-box,
+      .auth-panel {
+        width: 100%;
+      }
+
+      .auth-form,
+      .form,
+      label,
+      input,
+      select,
+      textarea,
+      .btn {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .pin-screen {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        padding-top: max(16px, env(safe-area-inset-top, 0px)) !important;
+        padding-bottom: max(150px, calc(150px + var(--safe-bottom))) !important;
+      }
+
+      .auth-shell,
+      .pin-box {
+        border-radius: 24px !important;
+      }
+
+      .auth-panel,
+      .pin-box {
+        padding: 22px 18px !important;
+      }
+    }
+
     @media print {
       body { background: #fff; color: #111827; }
       .sidebar, .topbar, .no-print, .toast, .modal, .pin-screen { display: none !important; }
@@ -3041,6 +3144,8 @@
 
     function closeMenu() {
       document.body.classList.remove("menu-open");
+      const overlay = document.querySelector(".overlay");
+      if (overlay) overlay.style.display = "";
     }
 
     function updateDateTexts() {
@@ -3946,6 +4051,9 @@
       applyBranding(user?.appName || DEFAULT_BRAND_NAME);
       applyTheme(user?.theme || localStorage.getItem("zakiyTheme") || "light", true);
       document.getElementById("authScreen").classList.remove("show");
+      closeMenu();
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
       updateUserUI();
       updateStorageModeUI();
       await loadData();
@@ -4097,6 +4205,19 @@
       console.error(error);
       alert("Database gagal dibuka. Coba buka lewat browser terbaru seperti Chrome, Safari, atau Edge.");
     });
+
+    // FIX: pastikan overlay/menu mobile tidak tertinggal dan membuat tampilan blur di HP.
+    document.addEventListener("click", function(event) {
+      const navButton = event.target.closest(".mobile-bottom-nav button, .nav button");
+      if (navButton && navButton.dataset.page) {
+        closeMenu();
+      }
+    }, true);
+
+    window.addEventListener("pageshow", function() {
+      closeMenu();
+    });
+
   </script>
 </body>
 </html>
