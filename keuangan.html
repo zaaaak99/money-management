@@ -403,6 +403,41 @@
     .summary-row strong { display:block; font-size: 13px; }
     .summary-row span { display:block; margin-top: 3px; color: var(--muted); font-size: 12px; }
 
+    .summary-row.clickable-row {
+      cursor: pointer;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .summary-row.clickable-row::after {
+      content: "›";
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      color: var(--gold-2);
+      background: rgba(212, 160, 56, .10);
+      font-weight: 950;
+      margin-left: 2px;
+    }
+
+    .summary-row.clickable-row:hover,
+    .summary-row.clickable-row:focus-visible {
+      border-color: rgba(212, 160, 56, .55);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .10);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .summary-row.clickable-row:active {
+      transform: scale(.985);
+    }
+
     .label {
       color: var(--muted);
       font-size: 13px;
@@ -2170,6 +2205,24 @@
       color: var(--gold-2);
     }
 
+  
+
+    @media (max-width: 860px) {
+      .summary-row.clickable-row {
+        min-height: 76px;
+        align-items: center;
+        padding: 14px 12px;
+        pointer-events: auto;
+      }
+      .summary-row.clickable-row > div:first-child {
+        min-width: 0;
+        flex: 1;
+      }
+      .summary-row.clickable-row .amount {
+        flex: 0 0 auto;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -2308,15 +2361,15 @@
               <span class="pill" id="monthExpenseRate">0% keluar</span>
             </div>
 
-            <div class="summary-row">
+            <div class="summary-row clickable-row" role="button" tabindex="0" onclick="openTransactionForm('income')" onkeydown="rowKeyOpen(event, 'income')" aria-label="Buka form pemasukan">
               <div><strong>Pemasukan</strong><span id="incomeCount">0 transaksi</span></div>
               <div class="amount positive" id="monthIncome">Rp0</div>
             </div>
-            <div class="summary-row">
+            <div class="summary-row clickable-row" role="button" tabindex="0" onclick="openTransactionForm('expense')" onkeydown="rowKeyOpen(event, 'expense')" aria-label="Buka form pengeluaran">
               <div><strong>Pengeluaran</strong><span id="expenseCount">0 transaksi</span></div>
               <div class="amount negative" id="monthExpense">Rp0</div>
             </div>
-            <div class="summary-row">
+            <div class="summary-row clickable-row" role="button" tabindex="0" onclick="showPage('reports')" onkeydown="cardKeyOpen(event, 'reports')" aria-label="Buka laporan cashflow">
               <div><strong>Sisa Cashflow</strong><span>Pemasukan dikurangi pengeluaran</span></div>
               <div class="amount blue" id="monthCashflow">Rp0</div>
             </div>
@@ -3354,6 +3407,30 @@
       toast.classList.add("show");
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+
+    function openTransactionForm(type) {
+      showPage("transactions");
+      requestAnimationFrame(() => {
+        const txType = document.getElementById("txType");
+        if (txType && (type === "income" || type === "expense")) {
+          txType.value = type;
+          txType.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+        const amountInput = document.getElementById("txAmount");
+        if (amountInput) {
+          try { amountInput.focus({ preventScroll: true }); } catch (e) { amountInput.focus(); }
+          amountInput.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    }
+
+    function rowKeyOpen(event, type) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openTransactionForm(type);
+      }
     }
 
     function showPage(pageId) {
