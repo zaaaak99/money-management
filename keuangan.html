@@ -220,6 +220,18 @@
       justify-content: flex-end;
     }
 
+    .statement-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .statement-actions .btn {
+      min-width: 132px;
+    }
+
     .btn {
       border: 0;
       min-height: 42px;
@@ -1319,6 +1331,14 @@
       .modal { padding: 12px; }
       .modal-card { border-radius: 20px; }
       .chart { overflow-x: auto; grid-template-columns: repeat(6, 66px); padding-bottom: 8px; }
+
+      #dashboard {
+        padding-bottom: max(32px, calc(32px + var(--safe-bottom)));
+      }
+
+      #dashboard .metric-card {
+        min-height: 132px;
+      }
     }
 
     @media (max-width: 430px) {
@@ -2122,7 +2142,35 @@
       }
     }
 
-</style>
+
+
+    .clickable-card {
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .clickable-card:hover,
+    .clickable-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(212, 160, 56, .55);
+      box-shadow: 0 22px 50px rgba(16, 24, 40, .16);
+      outline: none;
+    }
+
+    .clickable-card:active {
+      transform: scale(.985);
+    }
+
+    .clickable-card .small::after {
+      content: "  ›";
+      font-weight: 900;
+      color: var(--gold-2);
+    }
+
+  </style>
 </head>
 <body>
   <div id="authScreen" class="pin-screen show">
@@ -2282,22 +2330,22 @@
         <div style="height:16px"></div>
 
         <div class="grid grid-4">
-          <div class="card metric-card">
+          <div class="card metric-card clickable-card" role="button" tabindex="0" onclick="showPage('accounts')" onkeydown="cardKeyOpen(event, 'accounts')">
             <div class="metric-head"><div class="label">Akun Aktif</div><div class="metric-icon">AK</div></div>
             <div class="value" id="accountCount">0</div>
             <div class="small" id="topAccountText">Tambahkan akun pertama kamu.</div>
           </div>
-          <div class="card metric-card">
+          <div class="card metric-card clickable-card" role="button" tabindex="0" onclick="showPage('goals')" onkeydown="cardKeyOpen(event, 'goals')">
             <div class="metric-head"><div class="label">Progress Target</div><div class="metric-icon gold">TG</div></div>
             <div class="value gold" id="goalProgressAvg">0%</div>
             <div class="small" id="goalDashboardText">Belum ada target finansial.</div>
           </div>
-          <div class="card metric-card">
+          <div class="card metric-card clickable-card" role="button" tabindex="0" onclick="showPage('reports')" onkeydown="cardKeyOpen(event, 'reports')">
             <div class="metric-head"><div class="label">Kategori Terbesar</div><div class="metric-icon danger">KG</div></div>
             <div class="value negative" id="biggestExpenseAmount">Rp0</div>
             <div class="small" id="biggestExpenseCategory">Belum ada pengeluaran.</div>
           </div>
-          <div class="card metric-card">
+          <div class="card metric-card clickable-card" role="button" tabindex="0" onclick="showPage('history')" onkeydown="cardKeyOpen(event, 'history')">
             <div class="metric-head"><div class="label">Total Transaksi</div><div class="metric-icon purple">TR</div></div>
             <div class="value purple" id="transactionCount">0</div>
             <div class="small">Semua riwayat tersimpan otomatis.</div>
@@ -2537,9 +2585,10 @@
               <h3 class="card-title">Laporan E-Statement</h3>
               <p class="small">Pilih periode, lalu cetak atau unduh laporan transaksi.</p>
             </div>
-            <div class="quick-actions" style="display:flex">
+            <div class="statement-actions no-print">
               <button class="btn" onclick="generateStatement()">Generate</button>
               <button class="btn" onclick="downloadCSV()">Download CSV</button>
+              <button class="btn" onclick="downloadStatementHTML()">Download Laporan</button>
               <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
             </div>
           </div>
@@ -2736,6 +2785,13 @@
   <div id="toast" class="toast">Berhasil</div>
 
   <script>
+    function cardKeyOpen(event, page) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        showPage(page);
+      }
+    }
+
     const DB_NAME = "ZakiyFinanceDB";
     const DB_VERSION = 2;
     let db;
@@ -3829,7 +3885,7 @@
       const totalBalance = accounts.reduce((sum, account) => sum + Number(account.balance || 0), 0);
 
       target.innerHTML = `
-        <div class="split" style="align-items:flex-start;">
+        <div class="statement-head" style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;">
           <div>
             <h3 style="font-size:24px;margin-bottom:6px;">E-Statement ${currentBrandName}</h3>
             <p style="color:#4b5563;">Periode: ${start ? formatDate(start) : "Awal"} - ${end ? formatDate(end) : "Sekarang"}</p>
@@ -3840,7 +3896,7 @@
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0;">
+        <div class="statement-totals" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0;">
           <div style="border:1px solid #e5e7eb;border-radius:14px;padding:12px;"><strong>Pemasukan</strong><br>${money(income)}</div>
           <div style="border:1px solid #e5e7eb;border-radius:14px;padding:12px;"><strong>Pengeluaran</strong><br>${money(expense)}</div>
           <div style="border:1px solid #e5e7eb;border-radius:14px;padding:12px;"><strong>Net</strong><br>${money(income - expense)}</div>
@@ -3895,6 +3951,39 @@
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       downloadBlob(blob, `${slugifyBrand(currentBrandName)}-estatement-${todayISO()}.csv`);
       showToast("CSV berhasil diunduh.");
+    }
+
+    function downloadStatementHTML() {
+      generateStatement(false);
+      const output = document.getElementById("statementOutput");
+      if (!output) return;
+
+      const html = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Statement ${escapeHTML(currentBrandName)}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; color: #111827; }
+    .statement-paper { max-width: 980px; margin: 0 auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; font-size: 13px; }
+    th { background: #f3f4f6; }
+    .statement-head { display: flex; justify-content: space-between; gap: 14px; }
+    .statement-totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+    .statement-totals div { border: 1px solid #e5e7eb; border-radius: 14px; padding: 12px; }
+    @media (max-width: 700px) { .statement-head, .statement-totals { display: block; } .statement-totals div { margin-bottom: 10px; } body { margin: 14px; } }
+  </style>
+</head>
+<body>
+  <div class="statement-paper">${output.innerHTML}</div>
+</body>
+</html>`;
+
+      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+      downloadBlob(blob, `${slugifyBrand(currentBrandName)}-estatement-${todayISO()}.html`);
+      showToast("Laporan berhasil diunduh.");
     }
 
     function downloadBlob(blob, filename) {
