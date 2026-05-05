@@ -7537,6 +7537,190 @@
       }
     }
 
+
+    /* =====================================================
+       FIX KHUSUS AREA DILINGKARI — TANPA UBAH FITUR LAIN
+       - Logo bank di mode gelap/terang tidak kepotong dan dibuat lebih tajam
+       - Judul halaman HP tidak kepotong kanan
+       - Card PIN HP tidak melebar ke kanan
+       ===================================================== */
+
+    /* Logo akun: jangan zoom/crop, kasih ruang putih agar rapi */
+    #accountList .account-logo-icon,
+    #accountList .item-icon.account-logo-icon {
+      overflow: visible !important;
+      background: rgba(255,255,255,.96) !important;
+      border: 1px solid rgba(15,23,42,.08) !important;
+      display: grid !important;
+      place-items: center !important;
+    }
+
+    #accountList .account-logo-icon .logo-image,
+    #accountList .item-icon.account-logo-icon .logo-image,
+    #accountList .account-logo-icon img,
+    #accountList .item-icon.account-logo-icon img {
+      width: 34px !important;
+      height: 34px !important;
+      max-width: 34px !important;
+      max-height: 34px !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      border-radius: 10px !important;
+      padding: 2px !important;
+      background: #ffffff !important;
+      transform: none !important;
+      clip-path: none !important;
+      filter: none !important;
+      image-rendering: auto !important;
+    }
+
+    :root[data-theme="dark"] #accountList .account-logo-icon,
+    body[data-theme="dark"] #accountList .account-logo-icon {
+      background: rgba(255,255,255,.98) !important;
+      border-color: rgba(255,255,255,.18) !important;
+      box-shadow: 0 8px 22px rgba(0,0,0,.22) !important;
+    }
+
+    @media (max-width: 960px) {
+      /* Topbar HP: jangan ada konten melewati layar kanan */
+      .app {
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        margin: 0 !important;
+      }
+
+      .topbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        grid-template-columns: 48px minmax(0, 1fr) !important;
+      }
+
+      .page-title {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+      }
+
+      .page-title h2 {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        white-space: normal !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+        font-size: clamp(25px, 7.3vw, 36px) !important;
+        line-height: 1.05 !important;
+        letter-spacing: -.055em !important;
+      }
+
+      .quick-actions {
+        max-width: 100% !important;
+        overflow: hidden !important;
+      }
+
+      /* PIN page: card dan input tidak boleh melebar kanan */
+      #pinGateScreen.pin-screen {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+        box-sizing: border-box !important;
+      }
+
+      #pinGateScreen .pin-box {
+        width: 100% !important;
+        max-width: 420px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+      }
+
+      #pinGateScreen .pin-box form,
+      #pinGateScreen .pin-box label,
+      #pinGateScreen .pin-box input,
+      #pinGateScreen .pin-box button,
+      #pinGateScreen .pin-box .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      #pinGateScreen .pin-box input {
+        display: block !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+      }
+
+      /* Daftar akun di HP: logo tetap kelihatan full */
+      #accountList .item-icon,
+      #accountList .account-logo-icon {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        min-height: 48px !important;
+        border-radius: 16px !important;
+      }
+
+      #accountList .account-logo-icon .logo-image,
+      #accountList .item-icon.account-logo-icon .logo-image,
+      #accountList .account-logo-icon img,
+      #accountList .item-icon.account-logo-icon img {
+        width: 32px !important;
+        height: 32px !important;
+        max-width: 32px !important;
+        max-height: 32px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .page-title h2 {
+        font-size: clamp(23px, 6.7vw, 31px) !important;
+      }
+
+      #pinGateScreen.pin-screen {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+      }
+
+      #pinGateScreen .pin-box {
+        max-width: calc(100vw - 28px) !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+      }
+
+      #accountList .item-icon,
+      #accountList .account-logo-icon {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+      }
+
+      #accountList .account-logo-icon .logo-image,
+      #accountList .item-icon.account-logo-icon .logo-image,
+      #accountList .account-logo-icon img,
+      #accountList .item-icon.account-logo-icon img {
+        width: 30px !important;
+        height: 30px !important;
+        max-width: 30px !important;
+        max-height: 30px !important;
+      }
+    }
+
 </style>
 </head>
 <body>
