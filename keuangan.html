@@ -8859,7 +8859,8 @@
       try {
         const rawSession = localStorage.getItem("zakiy_active_user_session");
         const lastUser = (localStorage.getItem("zakiy_last_active_user") || "").trim();
-        if (!rawSession && lastUser) {
+        const isLoggedOut = localStorage.getItem("zakiy_user_logged_out") === "1";
+        if (!rawSession && lastUser && !isLoggedOut) {
           localStorage.setItem("zakiy_active_user_session", JSON.stringify({
             userKey: lastUser,
             expiresAt: Date.now() + (365 * 24 * 60 * 60 * 1000)
@@ -9703,6 +9704,7 @@
     const SESSION_KEY = "zakiy_active_user_session";
     const PIN_UNLOCK_KEY = "zakiy_pin_unlocked_user";
     const LAST_USER_KEY = "zakiy_last_active_user";
+    const LOGGED_OUT_KEY = "zakiy_user_logged_out";
     const SESSION_DURATION_MS = 365 * 24 * 60 * 60 * 1000; // sesi device aktif 1 tahun supaya tidak perlu daftar ulang
     let currentBrandName = DEFAULT_BRAND_NAME;
     let currentTheme = localStorage.getItem("zakiyTheme") || "light";
@@ -14004,6 +14006,7 @@
         };
         localStorage.setItem(SESSION_KEY, JSON.stringify(session));
         localStorage.setItem(LAST_USER_KEY, normalized);
+        localStorage.removeItem(LOGGED_OUT_KEY);
         sessionStorage.removeItem(SESSION_KEY);
       } catch (error) {
         console.warn("Session tidak bisa disimpan:", error);
@@ -14012,14 +14015,17 @@
 
     function readStoredLoginSession() {
       try {
+        const isLoggedOut = localStorage.getItem(LOGGED_OUT_KEY) === "1";
         const rawSession = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "";
         if (!rawSession) {
+          if (isLoggedOut) return null;
           const lastUser = normalizeUserName(localStorage.getItem(LAST_USER_KEY) || "");
           return lastUser ? { userKey: lastUser, expiresAt: Date.now() + SESSION_DURATION_MS } : null;
         }
 
         // Support sesi lama yang sebelumnya hanya menyimpan nama akun biasa.
         if (!rawSession.trim().startsWith("{")) {
+          if (isLoggedOut) return null;
           const legacyUserKey = normalizeUserName(rawSession);
           if (!legacyUserKey) return null;
           localStorage.setItem(LAST_USER_KEY, legacyUserKey);
@@ -14034,6 +14040,7 @@
         return { userKey, expiresAt };
       } catch (error) {
         console.warn("Session tidak bisa dibaca:", error);
+        if (localStorage.getItem(LOGGED_OUT_KEY) === "1") return null;
         const lastUser = normalizeUserName(localStorage.getItem(LAST_USER_KEY) || "");
         return lastUser ? { userKey: lastUser, expiresAt: Date.now() + SESSION_DURATION_MS } : null;
       }
@@ -14060,7 +14067,8 @@
       try {
         localStorage.removeItem(SESSION_KEY);
         sessionStorage.removeItem(SESSION_KEY);
-        // User terakhir tetap disimpan agar akun tidak perlu dibuat ulang di perangkat ini.
+        localStorage.setItem(LOGGED_OUT_KEY, "1");
+        // User terakhir tetap disimpan agar akun tidak perlu dibuat ulang, tapi tidak auto-login setelah logout.
       } catch (error) {
         console.warn("Session tidak bisa dihapus:", error);
       }
@@ -15326,6 +15334,43 @@
       window.addEventListener("resize", refreshLogoImages, { passive: true });
       setTimeout(refreshLogoImages, 300);
       setTimeout(refreshLogoImages, 1200);
+    })();
+
+
+    /* Fix logout: setelah Keluar akun, refresh tetap ke Login, bukan PIN */
+    (function fixLogoutStayOnLogin() {
+      function markLoggedOutLoginScreen() {
+        try {
+          localStorage.setItem("zakiy_user_logged_out", "1");
+          localStorage.removeItem("zakiy_active_user_session");
+          sessionStorage.removeItem("zakiy_active_user_session");
+          sessionStorage.removeItem("zakiy_pin_unlocked_user");
+        } catch (error) {}
+
+        document.getElementById("pinGateScreen")?.classList.remove("show");
+        document.getElementById("authScreen")?.classList.add("show");
+        if (typeof switchAuth === "function") switchAuth("login");
+      }
+
+      const oldLogout = window.logout;
+      if (typeof oldLogout === "function" && !oldLogout.__logoutStayLoginFixed) {
+        window.logout = function(...args) {
+          const result = oldLogout.apply(this, args);
+          markLoggedOutLoginScreen();
+          return result;
+        };
+        window.logout.__logoutStayLoginFixed = true;
+      }
+
+      const oldLogoutPin = window.logoutToLoginFromPin;
+      if (typeof oldLogoutPin === "function" && !oldLogoutPin.__logoutStayLoginFixed) {
+        window.logoutToLoginFromPin = function(...args) {
+          const result = oldLogoutPin.apply(this, args);
+          markLoggedOutLoginScreen();
+          return result;
+        };
+        window.logoutToLoginFromPin.__logoutStayLoginFixed = true;
+      }
     })();
 
 </script>
