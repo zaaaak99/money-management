@@ -8796,6 +8796,58 @@
       }
     }
 
+
+    /* =====================================================
+       FIX E-STATEMENT BISA SCROLL ATAS-BAWAH
+       Hanya bagian E-Statement yang diubah.
+       ===================================================== */
+
+    #statement,
+    #statementOutput,
+    #statementOutput.statement-paper,
+    #statement .statement-paper {
+      touch-action: pan-y !important;
+      overflow-y: visible !important;
+    }
+
+    #statementOutput .table-wrap,
+    #statement .statement-paper .table-wrap {
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x pan-y !important;
+      overscroll-behavior-x: contain !important;
+      overscroll-behavior-y: auto !important;
+    }
+
+    #statementOutput .table-wrap table,
+    #statement .statement-paper .table-wrap table {
+      width: max-content !important;
+      min-width: 900px !important;
+      max-width: none !important;
+    }
+
+    @media (max-width: 960px) {
+      #statementOutput.statement-paper,
+      #statement .statement-paper {
+        overflow: visible !important;
+        touch-action: pan-y !important;
+      }
+
+      #statementOutput .table-wrap,
+      #statement .statement-paper .table-wrap {
+        touch-action: pan-x pan-y !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      body:not(.menu-open) {
+        touch-action: pan-y !important;
+        overflow-y: auto !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -15370,6 +15422,60 @@
           return result;
         };
         window.logoutToLoginFromPin.__logoutStayLoginFixed = true;
+      }
+    })();
+
+
+    /* Fix touch E-Statement: bisa scroll atas-bawah, tetap bisa geser kanan-kiri tabel */
+    (function fixStatementVerticalScroll() {
+      function applyStatementVerticalScrollFix() {
+        const statement = document.getElementById("statement");
+        const output = document.getElementById("statementOutput");
+        const wrap = document.querySelector("#statementOutput .table-wrap");
+
+        if (statement) {
+          statement.style.touchAction = "pan-y";
+          statement.style.overflowY = "visible";
+        }
+
+        if (output) {
+          output.style.touchAction = "pan-y";
+          output.style.overflowY = "visible";
+        }
+
+        if (wrap) {
+          wrap.style.overflowX = "auto";
+          wrap.style.overflowY = "hidden";
+          wrap.style.webkitOverflowScrolling = "touch";
+          wrap.style.touchAction = "pan-x pan-y";
+          wrap.style.overscrollBehaviorX = "contain";
+          wrap.style.overscrollBehaviorY = "auto";
+
+          const table = wrap.querySelector("table");
+          if (table) {
+            table.style.width = "max-content";
+            table.style.maxWidth = "none";
+            table.style.minWidth = window.innerWidth <= 960 ? "940px" : "900px";
+          }
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", applyStatementVerticalScrollFix);
+      window.addEventListener("pageshow", applyStatementVerticalScrollFix, { passive: true });
+      window.addEventListener("resize", applyStatementVerticalScrollFix, { passive: true });
+      document.addEventListener("touchstart", event => {
+        if (event.target.closest("#statementOutput")) applyStatementVerticalScrollFix();
+      }, { passive: true });
+
+      const oldGenerate = window.generateStatement;
+      if (typeof oldGenerate === "function" && !oldGenerate.__verticalScrollFixed) {
+        window.generateStatement = function(...args) {
+          const result = oldGenerate.apply(this, args);
+          setTimeout(applyStatementVerticalScrollFix, 50);
+          setTimeout(applyStatementVerticalScrollFix, 180);
+          return result;
+        };
+        window.generateStatement.__verticalScrollFixed = true;
       }
     })();
 
