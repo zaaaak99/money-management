@@ -8508,6 +8508,199 @@
       }
     }
 
+
+    /* =====================================================
+       FIX FINAL E-STATEMENT TABLE SCROLL + LOGO MUNCUL
+       Hanya membenahi E-Statement dan logo agar tidak hilang.
+       ===================================================== */
+
+    #statementOutput.statement-paper {
+      max-width: 100% !important;
+      overflow: visible !important;
+    }
+
+    #statementOutput .table-wrap,
+    #statement .statement-paper .table-wrap {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x !important;
+      overscroll-behavior-x: contain !important;
+      scrollbar-width: thin !important;
+      position: relative !important;
+    }
+
+    #statementOutput .table-wrap table,
+    #statement .statement-paper .table-wrap table {
+      width: max-content !important;
+      min-width: 900px !important;
+      max-width: none !important;
+      table-layout: auto !important;
+      border-collapse: collapse !important;
+    }
+
+    #statementOutput .table-wrap th,
+    #statementOutput .table-wrap td,
+    #statement .statement-paper .table-wrap th,
+    #statement .statement-paper .table-wrap td {
+      white-space: nowrap !important;
+      min-width: 120px !important;
+    }
+
+    #statementOutput .table-wrap th:nth-child(5),
+    #statementOutput .table-wrap td:nth-child(5) {
+      min-width: 210px !important;
+    }
+
+    #statementOutput .table-wrap th:last-child,
+    #statementOutput .table-wrap td:last-child {
+      min-width: 145px !important;
+    }
+
+    #statementOutput .table-wrap::-webkit-scrollbar,
+    #statement .statement-paper .table-wrap::-webkit-scrollbar {
+      height: 9px !important;
+    }
+
+    #statementOutput .table-wrap::-webkit-scrollbar-track,
+    #statement .statement-paper .table-wrap::-webkit-scrollbar-track {
+      background: rgba(148, 163, 184, .22) !important;
+      border-radius: 999px !important;
+    }
+
+    #statementOutput .table-wrap::-webkit-scrollbar-thumb,
+    #statement .statement-paper .table-wrap::-webkit-scrollbar-thumb {
+      background: rgba(247, 217, 141, .70) !important;
+      border-radius: 999px !important;
+    }
+
+    /* Logo jangan hilang dan jangan kepotong */
+    .logo-image,
+    .logo-image.real-logo,
+    .item-icon .logo-image,
+    .account-logo-icon .logo-image,
+    .provider-card .logo-image,
+    #accountList .logo-image,
+    #settingsFinancialAccounts .logo-image {
+      display: block !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(15, 23, 42, .08) !important;
+      transform: none !important;
+      clip-path: none !important;
+      filter: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .account-logo-icon,
+    .item-icon {
+      display: grid !important;
+      place-items: center !important;
+      overflow: visible !important;
+    }
+
+    @media (max-width: 960px) {
+      #statementOutput .table-wrap,
+      #statement .statement-paper .table-wrap {
+        margin-top: 12px !important;
+        padding-bottom: 12px !important;
+      }
+
+      #statementOutput .table-wrap table,
+      #statement .statement-paper .table-wrap table {
+        min-width: 940px !important;
+      }
+    }
+
+    @media print {
+      #statementOutput.statement-paper,
+      #statementOutput .table-wrap,
+      #statement .statement-paper .table-wrap {
+        overflow: visible !important;
+        touch-action: auto !important;
+      }
+
+      #statementOutput .table-wrap table,
+      #statement .statement-paper .table-wrap table {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+
+
+    /* =====================================================
+       FIX HAMBURGER MENU HP — TANPA UBAH FITUR LAIN
+       Tombol garis 3 tetap ada. Saat diklik, sidebar langsung geser masuk dari kiri.
+       ===================================================== */
+
+    @media (max-width: 960px) {
+      .mobile-menu {
+        display: inline-grid !important;
+        place-items: center !important;
+        position: relative !important;
+        z-index: 130 !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      .sidebar {
+        position: fixed !important;
+        top: max(10px, env(safe-area-inset-top, 0px)) !important;
+        left: 10px !important;
+        bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+        width: min(340px, calc(100vw - 20px)) !important;
+        max-width: calc(100vw - 20px) !important;
+        max-height: calc(100dvh - 108px - env(safe-area-inset-bottom, 0px)) !important;
+        transform: translateX(calc(-100% - 26px)) !important;
+        transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease !important;
+        z-index: 120 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        will-change: transform !important;
+        pointer-events: auto !important;
+      }
+
+      body.menu-open .sidebar {
+        transform: translateX(0) !important;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, .38) !important;
+      }
+
+      .overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 110 !important;
+        background: rgba(15, 23, 42, .38) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity .22s ease !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      body.menu-open .overlay {
+        display: block !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+
+      body.menu-open {
+        overflow: hidden !important;
+        touch-action: none !important;
+      }
+
+      body.menu-open .sidebar {
+        touch-action: pan-y !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -11045,10 +11238,7 @@
     function logoImg(name, type = "Lainnya", sizeClass = "") {
       const title = escapeHTML(name || type || "Akun");
       const fallback = makeLogoDataURI(name, type);
-      const realLogo = getLogoUrl(name);
-      if (realLogo) {
-        return `<img class="logo-image real-logo ${sizeClass}" src="${functionAttr(realLogo)}" alt="Logo ${title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.classList.remove('real-logo');this.src='${functionAttr(fallback)}';" />`;
-      }
+      // Pakai logo SVG internal sebagai sumber utama supaya logo tidak hilang di HP/file lokal.
       return `<img class="logo-image ${sizeClass}" src="${functionAttr(fallback)}" alt="Logo ${title}" loading="lazy" />`;
     }
 
@@ -13141,7 +13331,7 @@
           <div style="border:1px solid #e5e7eb;border-radius:14px;padding:12px;"><strong>Net</strong><br>${money(income - expense)}</div>
         </div>
 
-        <div class="table-wrap" style="border-color:#e5e7eb;">
+        <div class="table-wrap statement-scroll-wrap" style="border-color:#e5e7eb;">
           <table>
             <thead>
               <tr>
@@ -14765,6 +14955,115 @@
         };
         window.generateStatement.__statementScrollPatched = true;
       }
+    })();
+
+
+    /* Fix final geser kanan-kiri E-Statement */
+    (function finalStatementScrollFix() {
+      function applyStatementTableScroll() {
+        const wrap = document.querySelector("#statementOutput .table-wrap");
+        if (!wrap) return;
+
+        wrap.style.display = "block";
+        wrap.style.width = "100%";
+        wrap.style.maxWidth = "100%";
+        wrap.style.overflowX = "auto";
+        wrap.style.overflowY = "hidden";
+        wrap.style.webkitOverflowScrolling = "touch";
+        wrap.style.touchAction = "pan-x";
+
+        const table = wrap.querySelector("table");
+        if (table) {
+          table.style.width = "max-content";
+          table.style.maxWidth = "none";
+          table.style.minWidth = window.innerWidth <= 960 ? "940px" : "900px";
+          table.style.tableLayout = "auto";
+        }
+      }
+
+      const oldGenerate = window.generateStatement;
+      if (typeof oldGenerate === "function" && !oldGenerate.__finalScrollFixed) {
+        window.generateStatement = function(...args) {
+          const result = oldGenerate.apply(this, args);
+          setTimeout(applyStatementTableScroll, 30);
+          setTimeout(applyStatementTableScroll, 160);
+          return result;
+        };
+        window.generateStatement.__finalScrollFixed = true;
+      }
+
+      document.addEventListener("DOMContentLoaded", applyStatementTableScroll);
+      window.addEventListener("pageshow", applyStatementTableScroll, { passive: true });
+      window.addEventListener("resize", applyStatementTableScroll, { passive: true });
+      document.addEventListener("touchstart", event => {
+        if (event.target.closest("#statementOutput .table-wrap")) applyStatementTableScroll();
+      }, { passive: true });
+    })();
+
+
+    /* Fix hamburger HP: klik garis 3 langsung buka/tutup sidebar */
+    (function fixHamburgerMenuMobile() {
+      function ensureMenuFunctions() {
+        const body = document.body;
+        const sidebar = document.querySelector(".sidebar");
+        const overlay = document.querySelector(".overlay");
+        const btn = document.querySelector(".mobile-menu");
+
+        if (!sidebar || !btn) return;
+
+        window.openzakiyMenu = function() {
+          body.classList.add("menu-open");
+          if (overlay) overlay.style.display = "block";
+          btn.setAttribute("aria-expanded", "true");
+        };
+
+        window.closezakiyMenu = function() {
+          body.classList.remove("menu-open");
+          if (overlay) overlay.style.display = "";
+          btn.setAttribute("aria-expanded", "false");
+        };
+
+        window.toggleMenu = function() {
+          if (body.classList.contains("menu-open")) {
+            window.closezakiyMenu();
+          } else {
+            window.openzakiyMenu();
+          }
+        };
+
+        if (btn.dataset.hamburgerFixed !== "true") {
+          btn.dataset.hamburgerFixed = "true";
+          btn.setAttribute("aria-label", "Buka menu");
+          btn.setAttribute("aria-expanded", body.classList.contains("menu-open") ? "true" : "false");
+          btn.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            window.toggleMenu();
+          }, true);
+        }
+
+        if (overlay && overlay.dataset.hamburgerFixed !== "true") {
+          overlay.dataset.hamburgerFixed = "true";
+          overlay.addEventListener("click", function() {
+            window.closezakiyMenu();
+          }, true);
+        }
+
+        sidebar.querySelectorAll("[data-page]").forEach(navBtn => {
+          if (navBtn.dataset.closeDrawerFixed === "true") return;
+          navBtn.dataset.closeDrawerFixed = "true";
+          navBtn.addEventListener("click", function() {
+            if (window.innerWidth <= 960) window.closezakiyMenu();
+          });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", ensureMenuFunctions);
+      window.addEventListener("pageshow", ensureMenuFunctions, { passive: true });
+      window.addEventListener("resize", function() {
+        ensureMenuFunctions();
+        if (window.innerWidth > 960) window.closezakiyMenu?.();
+      }, { passive: true });
     })();
 
 </script>
