@@ -6950,6 +6950,426 @@
       display: inline-block !important;
     }
 
+
+    /* =====================================================
+       FIX FINAL HP TIDAK KACAU
+       - PIN rapi di tengah dan tidak melebar ke kanan
+       - Topbar dashboard HP lebih ringkas
+       - Provider/e-wallet tetap 2 kolom, bukan kartu panjang 1 kolom
+       - Daftar akun tidak saling tindih
+       ===================================================== */
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden !important;
+    }
+
+    @media (max-width: 960px) {
+      body {
+        overflow-y: auto !important;
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      .app {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 10px !important;
+        padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)) !important;
+        margin: 0 !important;
+      }
+
+      main,
+      .section,
+      .card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .topbar {
+        display: grid !important;
+        grid-template-columns: 50px minmax(0, 1fr) !important;
+        gap: 10px 12px !important;
+        align-items: center !important;
+        width: calc(100% + 20px) !important;
+        margin: -10px -10px 14px !important;
+        padding: 12px 12px 14px !important;
+        border-radius: 0 0 24px 24px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 45 !important;
+      }
+
+      .mobile-menu {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        width: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        border-radius: 14px !important;
+      }
+
+      .page-title {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        min-width: 0 !important;
+      }
+
+      .page-title h2 {
+        font-size: clamp(28px, 8.2vw, 42px) !important;
+        line-height: 1.03 !important;
+        margin: 0 !important;
+        letter-spacing: -.055em !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .page-title p {
+        margin-top: 4px !important;
+        font-size: 13px !important;
+      }
+
+      .quick-actions {
+        grid-column: 1 / -1 !important;
+        grid-row: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+      }
+
+      .quick-actions .btn {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 10px 12px !important;
+        border-radius: 18px !important;
+        font-size: 14px !important;
+      }
+
+      .dashboard-hero,
+      .dashboard-bottom,
+      .settings-layout,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+
+      .balance-card {
+        min-height: auto !important;
+        padding: 18px !important;
+        border-radius: 24px !important;
+      }
+
+      .balance {
+        font-size: clamp(38px, 12vw, 58px) !important;
+        line-height: 1 !important;
+        letter-spacing: -.06em !important;
+        overflow-wrap: anywhere !important;
+      }
+
+      .balance-label-row {
+        gap: 8px !important;
+        align-items: center !important;
+      }
+
+      .balance-eye-btn {
+        min-height: 34px !important;
+        padding: 0 10px !important;
+        font-size: 11px !important;
+        flex: 0 0 auto !important;
+      }
+
+      .balance-actions {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+
+      .balance-actions .btn {
+        width: 100% !important;
+      }
+
+      .month-panel .summary-row,
+      .summary-row {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: 10px !important;
+        align-items: center !important;
+      }
+
+      .summary-row .amount,
+      .amount {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        overflow-wrap: anywhere !important;
+        text-align: right !important;
+      }
+
+      #providerGrid,
+      .provider-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+      }
+
+      .provider-card {
+        width: 100% !important;
+        min-height: 132px !important;
+        height: auto !important;
+        padding: 14px 10px !important;
+        border-radius: 22px !important;
+      }
+
+      .provider-card span {
+        font-size: 13px !important;
+        line-height: 1.25 !important;
+        word-break: break-word !important;
+      }
+
+      .logo-image {
+        width: 54px !important;
+        height: 54px !important;
+        border-radius: 16px !important;
+      }
+
+      #accountList {
+        display: grid !important;
+        gap: 12px !important;
+      }
+
+      #accountList .item {
+        display: grid !important;
+        grid-template-columns: 54px minmax(0, 1fr) 42px 42px 42px !important;
+        grid-template-rows: auto auto !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 12px !important;
+        border-radius: 22px !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+      }
+
+      #accountList .item .item-icon {
+        grid-column: 1 !important;
+        grid-row: 1 / 3 !important;
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 16px !important;
+      }
+
+      #accountList .item .item-body {
+        grid-column: 2 / 3 !important;
+        grid-row: 1 !important;
+        min-width: 0 !important;
+        overflow: hidden !important;
+      }
+
+      #accountList .item .item-body strong {
+        display: block !important;
+        font-size: 15px !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+      }
+
+      #accountList .item .item-body span {
+        display: block !important;
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+      }
+
+      #accountList .item .editable-amount {
+        grid-column: 2 / 3 !important;
+        grid-row: 2 !important;
+        justify-self: start !important;
+        align-self: start !important;
+        padding: 0 !important;
+        font-size: 14px !important;
+        line-height: 1.2 !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        text-align: left !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      #accountList .item .icon-btn {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        padding: 0 !important;
+        border-radius: 15px !important;
+      }
+
+      #accountList .item .icon-btn:nth-of-type(1) {
+        grid-column: 3 !important;
+        grid-row: 1 / 3 !important;
+      }
+
+      #accountList .item .icon-btn:nth-of-type(2) {
+        grid-column: 4 !important;
+        grid-row: 1 / 3 !important;
+      }
+
+      #accountList .item .icon-btn:nth-of-type(3) {
+        grid-column: 5 !important;
+        grid-row: 1 / 3 !important;
+      }
+
+      .mobile-bottom-nav {
+        display: flex !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: max(10px, env(safe-area-inset-bottom, 0px)) !important;
+        width: auto !important;
+        max-width: none !important;
+        padding: 8px !important;
+        gap: 6px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        z-index: 80 !important;
+      }
+
+      .mobile-bottom-nav button {
+        flex: 1 0 64px !important;
+        min-width: 64px !important;
+        font-size: 11px !important;
+      }
+
+      .sidebar {
+        top: 10px !important;
+        left: 10px !important;
+        bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+        width: min(340px, calc(100vw - 20px)) !important;
+        max-height: calc(100dvh - 104px - env(safe-area-inset-bottom, 0px)) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      #authScreen.pin-screen,
+      #pinGateScreen.pin-screen {
+        display: none !important;
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100dvh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(84px, calc(84px + env(safe-area-inset-bottom, 0px))) !important;
+      }
+
+      #authScreen.pin-screen.show,
+      #pinGateScreen.pin-screen.show {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      #authScreen .auth-shell {
+        width: min(440px, calc(100vw - 32px)) !important;
+        grid-template-columns: 1fr !important;
+        margin: auto !important;
+        max-height: none !important;
+        overflow: hidden !important;
+      }
+
+      #authScreen .auth-copy {
+        display: none !important;
+      }
+
+      #pinGateScreen .pin-box {
+        width: min(430px, calc(100vw - 32px)) !important;
+        max-width: calc(100vw - 32px) !important;
+        margin: auto !important;
+        overflow: visible !important;
+        border-radius: 26px !important;
+        padding: 18px !important;
+      }
+
+      #pinGateScreen .pin-box .form {
+        width: 100% !important;
+      }
+
+      #pinGateScreen input,
+      #pinGateScreen .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .quick-actions {
+        grid-template-columns: 1fr !important;
+      }
+
+      #providerGrid,
+      .provider-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+      }
+
+      .provider-card {
+        min-height: 118px !important;
+        padding: 12px 8px !important;
+      }
+
+      .logo-image {
+        width: 48px !important;
+        height: 48px !important;
+      }
+
+      #accountList .item {
+        grid-template-columns: 48px minmax(0, 1fr) 38px 38px 38px !important;
+        gap: 6px !important;
+        padding: 10px !important;
+      }
+
+      #accountList .item .icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+      }
+    }
+
+    @media (min-width: 961px) {
+      .dashboard-hero {
+        grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr) !important;
+      }
+
+      .dashboard-bottom {
+        grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr) !important;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -7007,7 +7427,22 @@
       if (empty) empty.style.display = "none";
     });
 
-  </script>
+  
+    /* Bootstrap aman: restore session dari user terakhir */
+    (function restoreLastUserSessionSafely() {
+      try {
+        const rawSession = localStorage.getItem("zakiy_active_user_session");
+        const lastUser = (localStorage.getItem("zakiy_last_active_user") || "").trim();
+        if (!rawSession && lastUser) {
+          localStorage.setItem("zakiy_active_user_session", JSON.stringify({
+            userKey: lastUser,
+            expiresAt: Date.now() + (365 * 24 * 60 * 60 * 1000)
+          }));
+        }
+      } catch (error) {}
+    })();
+
+</script>
   <div id="authScreen" class="pin-screen show">
     <div class="auth-shell">
       <div class="auth-copy">
@@ -7841,7 +8276,8 @@
     const DEFAULT_BRAND_NAME = "zakiy";
     const SESSION_KEY = "zakiy_active_user_session";
     const PIN_UNLOCK_KEY = "zakiy_pin_unlocked_user";
-    const SESSION_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // sesi device aktif 30 hari agar refresh tidak balik login
+    const LAST_USER_KEY = "zakiy_last_active_user";
+    const SESSION_DURATION_MS = 365 * 24 * 60 * 60 * 1000; // sesi device aktif 1 tahun supaya tidak perlu daftar ulang
     let currentBrandName = DEFAULT_BRAND_NAME;
     let currentTheme = localStorage.getItem("zakiyTheme") || "light";
     let currentUserProfilePhoto = "";
@@ -12133,11 +12569,13 @@
 
     function saveLoginSession(userKey) {
       try {
+        const normalized = normalizeUserName(userKey);
         const session = {
-          userKey: normalizeUserName(userKey),
+          userKey: normalized,
           expiresAt: Date.now() + SESSION_DURATION_MS
         };
         localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+        localStorage.setItem(LAST_USER_KEY, normalized);
         sessionStorage.removeItem(SESSION_KEY);
       } catch (error) {
         console.warn("Session tidak bisa disimpan:", error);
@@ -12147,23 +12585,29 @@
     function readStoredLoginSession() {
       try {
         const rawSession = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "";
-        if (!rawSession) return null;
+        if (!rawSession) {
+          const lastUser = normalizeUserName(localStorage.getItem(LAST_USER_KEY) || "");
+          return lastUser ? { userKey: lastUser, expiresAt: Date.now() + SESSION_DURATION_MS } : null;
+        }
 
         // Support sesi lama yang sebelumnya hanya menyimpan nama akun biasa.
         if (!rawSession.trim().startsWith("{")) {
           const legacyUserKey = normalizeUserName(rawSession);
           if (!legacyUserKey) return null;
+          localStorage.setItem(LAST_USER_KEY, legacyUserKey);
           return { userKey: legacyUserKey, expiresAt: Date.now() + SESSION_DURATION_MS };
         }
 
         const session = JSON.parse(rawSession);
         const userKey = normalizeUserName(session.userKey);
-        const expiresAt = Number(session.expiresAt || 0);
-        if (!userKey || !expiresAt) return null;
+        const expiresAt = Number(session.expiresAt || 0) || Date.now() + SESSION_DURATION_MS;
+        if (!userKey) return null;
+        localStorage.setItem(LAST_USER_KEY, userKey);
         return { userKey, expiresAt };
       } catch (error) {
         console.warn("Session tidak bisa dibaca:", error);
-        return null;
+        const lastUser = normalizeUserName(localStorage.getItem(LAST_USER_KEY) || "");
+        return lastUser ? { userKey: lastUser, expiresAt: Date.now() + SESSION_DURATION_MS } : null;
       }
     }
 
@@ -12172,6 +12616,11 @@
       if (!session) return "";
 
       if (Date.now() > session.expiresAt) {
+        const lastUser = normalizeUserName(localStorage.getItem(LAST_USER_KEY) || session.userKey || "");
+        if (lastUser) {
+          saveLoginSession(lastUser);
+          return lastUser;
+        }
         clearLoginSession();
         return "";
       }
@@ -12183,6 +12632,7 @@
       try {
         localStorage.removeItem(SESSION_KEY);
         sessionStorage.removeItem(SESSION_KEY);
+        // User terakhir tetap disimpan agar akun tidak perlu dibuat ulang di perangkat ini.
       } catch (error) {
         console.warn("Session tidak bisa dihapus:", error);
       }
@@ -12351,6 +12801,10 @@
     async function setLoggedUser(userKey, options = {}) {
       const rememberSession = options.remember !== false;
       currentUserEmail = normalizeUserName(userKey);
+      if (currentUserEmail) {
+        localStorage.setItem(LAST_USER_KEY, currentUserEmail);
+        saveLoginSession(currentUserEmail);
+      }
       const user = await getOne("users", currentUserEmail);
       currentUserName = user?.displayName || currentUserEmail || "User";
       currentUserProfilePhoto = user?.profilePhoto || "";
@@ -12992,6 +13446,44 @@
           window.forcePinGateLength(window.__currentPinUser || null);
         }
       });
+    })();
+
+
+    /* Fix final HP layout + PIN width */
+    (function finalMobileLayoutRepair() {
+      function repairMobileLayout() {
+        const isMobile = window.innerWidth <= 960;
+
+        const pinScreen = document.getElementById("pinGateScreen");
+        const authScreen = document.getElementById("authScreen");
+        const pinBox = document.querySelector("#pinGateScreen .pin-box");
+
+        if (isMobile) {
+          [pinScreen, authScreen].forEach(screen => {
+            if (!screen) return;
+            screen.style.overflowY = "auto";
+            screen.style.overflowX = "hidden";
+            screen.style.webkitOverflowScrolling = "touch";
+            screen.style.touchAction = "pan-y";
+          });
+
+          if (pinBox) {
+            pinBox.style.width = "min(430px, calc(100vw - 32px))";
+            pinBox.style.maxWidth = "calc(100vw - 32px)";
+            pinBox.style.margin = "auto";
+          }
+        }
+
+        if (document.getElementById("pinGateScreen")?.classList.contains("show")) {
+          window.forcePinGateLength?.(window.__currentPinUser || null);
+          window.updatePinDotsByInput?.(window.__currentPinUser || null);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", repairMobileLayout);
+      window.addEventListener("pageshow", repairMobileLayout, { passive: true });
+      window.addEventListener("resize", repairMobileLayout, { passive: true });
+      window.addEventListener("orientationchange", () => setTimeout(repairMobileLayout, 250), { passive: true });
     })();
 
 </script>
