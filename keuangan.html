@@ -6746,6 +6746,210 @@
       }
     }
 
+
+    /* =====================================================
+       FINAL FIX HP + LAPTOP + PIN + DATA
+       ===================================================== */
+
+    @media (min-width: 961px) {
+      .dashboard-hero {
+        grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr) !important;
+      }
+
+      .dashboard-bottom {
+        grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr) !important;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (max-width: 960px) {
+      html,
+      body {
+        width: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+      }
+
+      .app {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 12px !important;
+        padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      main,
+      .section,
+      .card,
+      .topbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .topbar {
+        margin: -12px -12px 14px !important;
+        width: calc(100% + 24px) !important;
+        border-radius: 0 0 24px 24px !important;
+        padding: 12px !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 40 !important;
+      }
+
+      .dashboard-hero,
+      .dashboard-bottom,
+      .settings-layout,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .form-row,
+      .quick-start-card {
+        grid-template-columns: 1fr !important;
+      }
+
+      .balance-card {
+        min-height: auto !important;
+        padding: 20px !important;
+      }
+
+      .balance {
+        font-size: clamp(36px, 12vw, 56px) !important;
+        line-height: 1 !important;
+        overflow-wrap: anywhere !important;
+      }
+
+      .balance-actions,
+      .quick-actions,
+      .profile-actions,
+      .split {
+        flex-wrap: wrap !important;
+      }
+
+      .balance-actions .btn,
+      .quick-actions .btn,
+      .profile-actions .btn {
+        flex: 1 1 100% !important;
+      }
+
+      #providerGrid,
+      .provider-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      .summary-row {
+        gap: 10px !important;
+      }
+
+      .summary-row .amount,
+      .amount,
+      .value {
+        overflow-wrap: anywhere !important;
+      }
+
+      .table-wrap,
+      .statement-paper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      table {
+        min-width: 680px !important;
+      }
+
+      .sidebar {
+        position: fixed !important;
+        top: 10px !important;
+        left: 10px !important;
+        bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+        width: min(340px, calc(100vw - 20px)) !important;
+        max-height: calc(100dvh - 104px - env(safe-area-inset-bottom, 0px)) !important;
+        transform: translateX(calc(-100% - 24px)) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        z-index: 90 !important;
+      }
+
+      body.menu-open .sidebar {
+        transform: translateX(0) !important;
+      }
+
+      .mobile-bottom-nav {
+        display: flex !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: max(10px, env(safe-area-inset-bottom, 0px)) !important;
+        width: auto !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      .mobile-bottom-nav button {
+        min-width: 64px !important;
+        flex: 1 0 auto !important;
+      }
+
+      #authScreen.pin-screen,
+      #pinGateScreen.pin-screen {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: max(14px, env(safe-area-inset-top, 0px)) 14px max(80px, calc(80px + env(safe-area-inset-bottom, 0px))) !important;
+      }
+
+      #authScreen .auth-shell {
+        width: min(440px, calc(100vw - 28px)) !important;
+        grid-template-columns: 1fr !important;
+      }
+
+      #authScreen .auth-copy {
+        display: none !important;
+      }
+
+      #authScreen .pin-box,
+      #pinGateScreen .pin-box {
+        width: 100% !important;
+        max-height: none !important;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .card {
+        padding: 14px !important;
+        border-radius: 20px !important;
+      }
+
+      #providerGrid,
+      .provider-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .page-title h2 {
+        font-size: 28px !important;
+      }
+    }
+
+    .pin-dots {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 9px !important;
+    }
+
+    .pin-dots span {
+      display: inline-block !important;
+    }
+
 </style>
 </head>
 <body>
@@ -7637,7 +7841,7 @@
     const DEFAULT_BRAND_NAME = "zakiy";
     const SESSION_KEY = "zakiy_active_user_session";
     const PIN_UNLOCK_KEY = "zakiy_pin_unlocked_user";
-    const SESSION_DURATION_MS = 2 * 60 * 1000; // sesi login otomatis aktif selama 2 menit
+    const SESSION_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // sesi device aktif 30 hari agar refresh tidak balik login
     let currentBrandName = DEFAULT_BRAND_NAME;
     let currentTheme = localStorage.getItem("zakiyTheme") || "light";
     let currentUserProfilePhoto = "";
@@ -9353,96 +9557,293 @@
       return doc(cloud.db, "users", currentUserEmail, storeName, String(key));
     }
 
-    async function getAll(storeName) {
-      if (cloud.enabled) {
-        if (storeName !== "users" && !currentUserEmail) return [];
-        const { getDocs } = cloud.api;
-        const snapshot = await getDocs(cloudCollectionRef(storeName));
-        return snapshot.docs.map(item => {
-          const data = item.data() || {};
-          if (storeName === "users") return { ...data, email: data.email || item.id };
-          return { ...data, id: data.id ?? Number(item.id) };
+
+    /* =====================================================
+       BACKUP DATA DEVICE — IndexedDB + localStorage
+       Agar data tetap tersimpan di perangkat user dan aman saat refresh.
+       ===================================================== */
+    const LOCAL_BACKUP_KEY = "zakiy_device_backup_v3";
+    const BACKUP_STORES = ["users", "accounts", "transactions", "goals", "settings"];
+
+    function cloneBackupData(value) {
+      try {
+        return JSON.parse(JSON.stringify(value));
+      } catch (error) {
+        return value;
+      }
+    }
+
+    function readLocalBackup() {
+      try {
+        const raw = localStorage.getItem(LOCAL_BACKUP_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+        BACKUP_STORES.forEach(store => {
+          if (!Array.isArray(parsed[store])) parsed[store] = [];
         });
+        return parsed;
+      } catch (error) {
+        const blank = {};
+        BACKUP_STORES.forEach(store => blank[store] = []);
+        return blank;
+      }
+    }
+
+    function writeLocalBackup(backup) {
+      try {
+        localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify(backup));
+      } catch (error) {
+        console.warn("Backup lokal penuh/tidak bisa disimpan:", error);
+      }
+    }
+
+    function localStoreKey(storeName, value) {
+      if (storeName === "users") return normalizeUserName(value?.email ?? value);
+      if (storeName === "settings") return String(value?.key ?? value);
+      return String(value?.id ?? value);
+    }
+
+    function localGetAll(storeName) {
+      const backup = readLocalBackup();
+      return cloneBackupData(backup[storeName] || []);
+    }
+
+    function localGetOne(storeName, key) {
+      const normalizedKey = storeName === "users" ? normalizeUserName(key) : String(key);
+      return localGetAll(storeName).find(item => localStoreKey(storeName, item) === normalizedKey) || null;
+    }
+
+    function localPut(storeName, data) {
+      const backup = readLocalBackup();
+      if (!Array.isArray(backup[storeName])) backup[storeName] = [];
+
+      const payload = cloneBackupData(data || {});
+      if (storeName === "users") {
+        payload.email = normalizeUserName(payload.email || currentUserEmail || payload.displayName || "");
+        if (!payload.email) return "";
+      } else if (storeName === "settings") {
+        payload.key = String(payload.key || Date.now());
+      } else {
+        if (!payload.id) payload.id = Date.now() + Math.floor(Math.random() * 100000);
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName).getAll();
-        request.onsuccess = () => resolve(request.result || []);
-        request.onerror = () => reject(request.error);
-      });
+      const key = localStoreKey(storeName, payload);
+      const index = backup[storeName].findIndex(item => localStoreKey(storeName, item) === key);
+      if (index >= 0) backup[storeName][index] = payload;
+      else backup[storeName].push(payload);
+
+      writeLocalBackup(backup);
+      return storeName === "users" ? payload.email : (storeName === "settings" ? payload.key : payload.id);
+    }
+
+    function localDelete(storeName, key) {
+      const backup = readLocalBackup();
+      if (!Array.isArray(backup[storeName])) backup[storeName] = [];
+      const normalizedKey = storeName === "users" ? normalizeUserName(key) : String(key);
+      backup[storeName] = backup[storeName].filter(item => localStoreKey(storeName, item) !== normalizedKey);
+      writeLocalBackup(backup);
+    }
+
+    function localClear(storeName) {
+      const backup = readLocalBackup();
+      backup[storeName] = [];
+      writeLocalBackup(backup);
+    }
+
+    async function syncRowsToIndexedDB(storeName, rows) {
+      if (cloud.enabled || !db || !Array.isArray(rows) || !rows.length) return;
+      for (const row of rows) {
+        try {
+          await new Promise((resolve) => {
+            const request = tx(storeName, "readwrite").put(cloneBackupData(row));
+            request.onsuccess = () => resolve();
+            request.onerror = () => resolve();
+          });
+        } catch (error) {}
+      }
+    }
+
+
+    async function getAll(storeName) {
+      if (cloud.enabled) {
+        try {
+          if (storeName !== "users" && !currentUserEmail) return [];
+          const { getDocs } = cloud.api;
+          const snapshot = await getDocs(cloudCollectionRef(storeName));
+          const rows = snapshot.docs.map(item => {
+            const data = item.data() || {};
+            if (storeName === "users") return { ...data, email: data.email || item.id };
+            return { ...data, id: data.id ?? Number(item.id) };
+          });
+          rows.forEach(row => localPut(storeName, row));
+          return rows;
+        } catch (error) {
+          console.warn("Cloud gagal dibaca, memakai backup device:", error);
+          return localGetAll(storeName);
+        }
+      }
+
+      try {
+        const rows = await new Promise((resolve, reject) => {
+          const request = tx(storeName).getAll();
+          request.onsuccess = () => resolve(request.result || []);
+          request.onerror = () => reject(request.error);
+        });
+
+        if (rows.length) {
+          rows.forEach(row => localPut(storeName, row));
+          return rows;
+        }
+
+        const backupRows = localGetAll(storeName);
+        if (backupRows.length) {
+          await syncRowsToIndexedDB(storeName, backupRows);
+          return backupRows;
+        }
+
+        return [];
+      } catch (error) {
+        console.warn("IndexedDB gagal dibaca, memakai backup device:", error);
+        return localGetAll(storeName);
+      }
     }
 
     async function getOne(storeName, key) {
       if (cloud.enabled) {
-        if (storeName !== "users" && !currentUserEmail) return null;
-        const { getDoc } = cloud.api;
-        const snapshot = await getDoc(cloudDocRef(storeName, key));
-        if (!snapshot.exists()) return null;
-        const data = snapshot.data() || {};
-        if (storeName === "users") return { ...data, email: data.email || String(key) };
-        return { ...data, id: data.id ?? Number(snapshot.id) };
+        try {
+          if (storeName !== "users" && !currentUserEmail) return null;
+          const { getDoc } = cloud.api;
+          const snapshot = await getDoc(cloudDocRef(storeName, key));
+          if (!snapshot.exists()) return localGetOne(storeName, key);
+          const data = snapshot.data() || {};
+          const row = storeName === "users" ? { ...data, email: data.email || String(key) } : { ...data, id: data.id ?? Number(snapshot.id) };
+          localPut(storeName, row);
+          return row;
+        } catch (error) {
+          console.warn("Cloud gagal dibaca, memakai backup device:", error);
+          return localGetOne(storeName, key);
+        }
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName).get(key);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
+      try {
+        const row = await new Promise((resolve, reject) => {
+          const request = tx(storeName).get(key);
+          request.onsuccess = () => resolve(request.result || null);
+          request.onerror = () => reject(request.error);
+        });
+
+        if (row) {
+          localPut(storeName, row);
+          return row;
+        }
+
+        const backupRow = localGetOne(storeName, key);
+        if (backupRow) await syncRowsToIndexedDB(storeName, [backupRow]);
+        return backupRow;
+      } catch (error) {
+        console.warn("IndexedDB gagal dibaca, memakai backup device:", error);
+        return localGetOne(storeName, key);
+      }
     }
 
     async function addData(storeName, data) {
-      if (cloud.enabled) {
-        if (storeName === "users") {
-          const key = data.email;
-          await cloud.api.setDoc(cloudDocRef("users", key), data);
-          return key;
-        }
-
-        const id = data.id || makeCloudId();
-        const payload = { ...data, id };
-        await cloud.api.setDoc(cloudDocRef(storeName, id), payload);
-        return id;
+      const payload = cloneBackupData(data || {});
+      if (storeName !== "users" && storeName !== "settings" && !payload.id) {
+        payload.id = Date.now() + Math.floor(Math.random() * 100000);
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName, "readwrite").add(data);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
+      if (cloud.enabled) {
+        try {
+          if (storeName === "users") {
+            const key = payload.email;
+            await cloud.api.setDoc(cloudDocRef("users", key), payload);
+            localPut(storeName, payload);
+            return key;
+          }
+
+          const id = payload.id || makeCloudId();
+          const finalPayload = { ...payload, id };
+          await cloud.api.setDoc(cloudDocRef(storeName, id), finalPayload);
+          localPut(storeName, finalPayload);
+          return id;
+        } catch (error) {
+          console.warn("Cloud gagal simpan, memakai backup device:", error);
+          return localPut(storeName, payload);
+        }
+      }
+
+      try {
+        const id = await new Promise((resolve, reject) => {
+          const request = tx(storeName, "readwrite").add(payload);
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+        if (storeName !== "users" && storeName !== "settings" && !payload.id) payload.id = id;
+        localPut(storeName, payload);
+        return id;
+      } catch (error) {
+        console.warn("IndexedDB gagal simpan, memakai backup device:", error);
+        return localPut(storeName, payload);
+      }
     }
 
     async function putData(storeName, data) {
-      if (cloud.enabled) {
-        if (storeName === "users") {
-          const key = data.email;
-          await cloud.api.setDoc(cloudDocRef("users", key), data, { merge: true });
-          return key;
-        }
+      const payload = cloneBackupData(data || {});
 
-        const id = data.id || makeCloudId();
-        const payload = { ...data, id };
-        await cloud.api.setDoc(cloudDocRef(storeName, id), payload, { merge: true });
-        return id;
+      if (cloud.enabled) {
+        try {
+          if (storeName === "users") {
+            const key = payload.email;
+            await cloud.api.setDoc(cloudDocRef("users", key), payload, { merge: true });
+            localPut(storeName, payload);
+            return key;
+          }
+
+          const id = payload.id || makeCloudId();
+          const finalPayload = { ...payload, id };
+          await cloud.api.setDoc(cloudDocRef(storeName, id), finalPayload, { merge: true });
+          localPut(storeName, finalPayload);
+          return id;
+        } catch (error) {
+          console.warn("Cloud gagal simpan, memakai backup device:", error);
+          return localPut(storeName, payload);
+        }
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName, "readwrite").put(data);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
+      try {
+        const id = await new Promise((resolve, reject) => {
+          const request = tx(storeName, "readwrite").put(payload);
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+        localPut(storeName, payload);
+        return id;
+      } catch (error) {
+        console.warn("IndexedDB gagal simpan, memakai backup device:", error);
+        return localPut(storeName, payload);
+      }
     }
 
     async function deleteData(storeName, id) {
       if (cloud.enabled) {
-        await cloud.api.deleteDoc(cloudDocRef(storeName, id));
+        try {
+          await cloud.api.deleteDoc(cloudDocRef(storeName, id));
+        } catch (error) {
+          console.warn("Cloud gagal hapus:", error);
+        }
+        localDelete(storeName, id);
         return;
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName, "readwrite").delete(id);
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error);
-      });
+      try {
+        await new Promise((resolve, reject) => {
+          const request = tx(storeName, "readwrite").delete(id);
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+      } catch (error) {
+        console.warn("IndexedDB gagal hapus:", error);
+      }
+      localDelete(storeName, id);
     }
 
     async function clearStore(storeName) {
@@ -9451,14 +9852,20 @@
         for (const row of rows) {
           await deleteData(storeName, storeName === "users" ? row.email : row.id);
         }
+        localClear(storeName);
         return;
       }
 
-      return new Promise((resolve, reject) => {
-        const request = tx(storeName, "readwrite").clear();
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error);
-      });
+      try {
+        await new Promise((resolve, reject) => {
+          const request = tx(storeName, "readwrite").clear();
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+      } catch (error) {
+        console.warn("IndexedDB gagal clear:", error);
+      }
+      localClear(storeName);
     }
 
     async function loadData() {
@@ -10007,6 +10414,7 @@
       if (!user) return;
       user.pinEnabled = true;
       user.pinHash = await hashPassword("pin:" + pin);
+      user.pinLength = pin.length;
       user.updatedAt = new Date().toISOString();
       await putData("users", user);
       document.getElementById("pinInput").value = "";
@@ -10041,7 +10449,7 @@
       const subtitle = document.getElementById("pinGateSubtitle");
       const nameEl = document.getElementById("pinGateName");
       const pinInput = document.getElementById("pinGateInput");
-      const pinLen = Number(user?.pinLength || 4);
+      const pinLen = Number(user?.pinLength || 6);
       if (pinInput) {
         pinInput.value = "";
         pinInput.setAttribute("maxlength", String(pinLen >= 4 && pinLen <= 6 ? pinLen : 4));
@@ -12255,7 +12663,7 @@
       function getPinTotal(user) {
         const len = Number(user && user.pinLength);
         if (len >= 4 && len <= 6) return len;
-        return 4;
+        return 6;
       }
 
       function drawPinDots(total) {
@@ -12530,6 +12938,60 @@
       document.addEventListener("touchstart", event => {
         if (event.target.closest("#authScreen, #pinGateScreen")) syncAuthVisibleState();
       }, { passive: true });
+    })();
+
+
+    /* Final fix: PIN 4/6, sesi refresh, dan backup device */
+    (function finalPinSessionDeviceFix() {
+      function getSafePinLength(user) {
+        const len = Number(user?.pinLength || window.__currentPinUser?.pinLength || 0);
+        if (len >= 4 && len <= 6) return len;
+        return 6;
+      }
+
+      window.forcePinGateLength = function(user) {
+        const input = document.getElementById("pinGateInput");
+        const dots = document.querySelector(".pin-dots");
+        const total = getSafePinLength(user);
+        if (input) {
+          input.setAttribute("maxlength", String(total));
+          input.value = String(input.value || "").replace(/\D/g, "").slice(0, total);
+        }
+        if (dots && dots.children.length !== total) {
+          dots.innerHTML = Array.from({ length: total }, () => "<span></span>").join("");
+        }
+        if (typeof window.updatePinDotsByInput === "function") {
+          window.updatePinDotsByInput(user || window.__currentPinUser || null);
+        }
+      };
+
+      const oldUpdatePinDots = window.updatePinDotsByInput;
+      window.updatePinDotsByInput = function(user) {
+        const input = document.getElementById("pinGateInput");
+        const dots = document.querySelector(".pin-dots");
+        if (!input || !dots) return;
+        const total = getSafePinLength(user);
+        if (dots.children.length !== total) {
+          dots.innerHTML = Array.from({ length: total }, () => "<span></span>").join("");
+        }
+        input.setAttribute("maxlength", String(total));
+        const cleaned = String(input.value || "").replace(/\D/g, "").slice(0, total);
+        if (input.value !== cleaned) input.value = cleaned;
+        Array.from(dots.children).forEach((dot, index) => {
+          dot.classList.toggle("filled", index < cleaned.length);
+          dot.classList.toggle("active", index < cleaned.length);
+        });
+      };
+
+      document.addEventListener("input", event => {
+        if (event.target?.id === "pinGateInput") window.updatePinDotsByInput(window.__currentPinUser || null);
+      }, true);
+
+      window.addEventListener("pageshow", () => {
+        if (document.getElementById("pinGateScreen")?.classList.contains("show")) {
+          window.forcePinGateLength(window.__currentPinUser || null);
+        }
+      });
     })();
 
 </script>
