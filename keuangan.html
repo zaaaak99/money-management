@@ -8373,6 +8373,141 @@
       }
     }
 
+
+    /* =====================================================
+       FIX E-STATEMENT BISA GESER + LOGO GAMBAR MUNCUL
+       - E-Statement bisa geser kanan-kiri seperti Riwayat
+       - Logo bank/e-wallet tetap muncul dan rapi
+       ===================================================== */
+
+    #statementOutput.statement-paper,
+    #statement .statement-paper {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x !important;
+      overscroll-behavior-x: contain !important;
+      display: block !important;
+      position: relative !important;
+      scrollbar-width: thin !important;
+    }
+
+    #statementOutput table,
+    #statement .statement-paper table {
+      width: max-content !important;
+      min-width: 820px !important;
+      max-width: none !important;
+      table-layout: auto !important;
+      border-collapse: collapse !important;
+    }
+
+    #statementOutput th,
+    #statementOutput td,
+    #statement .statement-paper th,
+    #statement .statement-paper td {
+      white-space: nowrap !important;
+      min-width: 112px !important;
+    }
+
+    #statementOutput th:first-child,
+    #statementOutput td:first-child,
+    #statement .statement-paper th:first-child,
+    #statement .statement-paper td:first-child {
+      min-width: 120px !important;
+    }
+
+    #statementOutput th:nth-child(5),
+    #statementOutput td:nth-child(5),
+    #statement .statement-paper th:nth-child(5),
+    #statement .statement-paper td:nth-child(5) {
+      min-width: 180px !important;
+    }
+
+    #statementOutput::-webkit-scrollbar,
+    #statement .statement-paper::-webkit-scrollbar {
+      height: 8px !important;
+    }
+
+    #statementOutput::-webkit-scrollbar-track,
+    #statement .statement-paper::-webkit-scrollbar-track {
+      background: rgba(148, 163, 184, .18) !important;
+      border-radius: 999px !important;
+    }
+
+    #statementOutput::-webkit-scrollbar-thumb,
+    #statement .statement-paper::-webkit-scrollbar-thumb {
+      background: rgba(247, 217, 141, .55) !important;
+      border-radius: 999px !important;
+    }
+
+    .logo-image,
+    .logo-image.real-logo,
+    .item-icon .logo-image,
+    .account-logo-icon .logo-image,
+    .provider-card .logo-image,
+    #accountList .logo-image,
+    #settingsFinancialAccounts .logo-image,
+    #statementOutput .logo-image {
+      display: block !important;
+      object-fit: contain !important;
+      object-position: center center !important;
+      background: #ffffff !important;
+      border: 1px solid rgba(15, 23, 42, .08) !important;
+      transform: none !important;
+      clip-path: none !important;
+      overflow: visible !important;
+      filter: none !important;
+      image-rendering: auto !important;
+    }
+
+    .logo-image.real-logo {
+      padding: 6px !important;
+    }
+
+    .item-icon,
+    .account-logo-icon {
+      overflow: visible !important;
+      display: grid !important;
+      place-items: center !important;
+    }
+
+    @media (max-width: 960px) {
+      #statement .card {
+        overflow: visible !important;
+      }
+
+      #statementOutput.statement-paper,
+      #statement .statement-paper {
+        margin-top: 12px !important;
+        padding-bottom: 10px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-x !important;
+      }
+
+      #statementOutput table,
+      #statement .statement-paper table {
+        min-width: 860px !important;
+      }
+    }
+
+    @media print {
+      #statementOutput.statement-paper,
+      #statement .statement-paper {
+        overflow: visible !important;
+        touch-action: auto !important;
+      }
+
+      #statementOutput table,
+      #statement .statement-paper table {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -10869,9 +11004,9 @@
     };
 
     function getLogoUrl(name) {
-      // Pakai logo SVG internal agar tidak blur/kepotong di HP maupun mode gelap.
-      // Favicon internet sering buram dan ukurannya tidak konsisten.
-      return "";
+      const domain = providerLogoDomains[name];
+      if (!domain) return "";
+      return `https://www.google.com/s2/favicons?sz=256&domain_url=https://${domain}`;
     }
 
     function functionAttr(value) {
@@ -14592,6 +14727,44 @@
       document.addEventListener("touchstart", event => {
         if (event.target.closest("#history .table-wrap")) applyHistoryScrollFix();
       }, { passive: true });
+    })();
+
+
+    /* Fix touch geser kanan-kiri E-Statement */
+    (function fixStatementHorizontalScroll() {
+      function applyStatementScrollFix() {
+        const output = document.getElementById("statementOutput");
+        if (!output) return;
+        output.style.overflowX = "auto";
+        output.style.overflowY = "visible";
+        output.style.webkitOverflowScrolling = "touch";
+        output.style.touchAction = "pan-x";
+
+        const table = output.querySelector("table");
+        if (table) {
+          table.style.minWidth = window.innerWidth <= 960 ? "860px" : "820px";
+          table.style.width = "max-content";
+          table.style.maxWidth = "none";
+          table.style.tableLayout = "auto";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", applyStatementScrollFix);
+      window.addEventListener("pageshow", applyStatementScrollFix, { passive: true });
+      window.addEventListener("resize", applyStatementScrollFix, { passive: true });
+      document.addEventListener("touchstart", event => {
+        if (event.target.closest("#statementOutput")) applyStatementScrollFix();
+      }, { passive: true });
+
+      const oldGenerateStatement = window.generateStatement;
+      if (typeof oldGenerateStatement === "function" && !oldGenerateStatement.__statementScrollPatched) {
+        window.generateStatement = function(...args) {
+          const result = oldGenerateStatement.apply(this, args);
+          setTimeout(applyStatementScrollFix, 60);
+          return result;
+        };
+        window.generateStatement.__statementScrollPatched = true;
+      }
     })();
 
 </script>
